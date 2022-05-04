@@ -1,0 +1,4 @@
+generators:
+# list of all the siteConfig*.yaml exist in the repository
+  - bellerica-lenovo-2.yaml
+  - bellerica-lenovo.yaml

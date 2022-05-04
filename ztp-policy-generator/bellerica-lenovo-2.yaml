@@ -1,0 +1,64 @@
+---
+apiVersion: ran.openshift.io/v1
+kind: SiteConfig
+metadata:
+  name: "lenovo-1"
+  namespace: "lenovo-1"
+spec:
+  baseDomain: "yourbasedomain.com"
+  pullSecretRef:
+    name: "assisted-deployment-pull-secret-lenovo-1"
+  clusterImageSetNameRef: "img4.9.18-x86-64-appsub"
+  sshPublicKey: "yourPublicKey" 
+  clusters:
+  - clusterName: "lenovo-1"
+    clusterLabels:
+      sites : "lenovo-1"
+    networkType: "OVNKubernetes"
+    clusterNetwork:
+      - cidr: 10.136.0.0/14
+        hostPrefix: 23
+    machineNetwork:
+      - cidr: 192.168.53.0/25
+    serviceNetwork:
+      - 172.31.0.0/16
+    additionalNTPSources:
+      - 192.168.254.20
+    nodes:
+      - hostName: "yourhostname"
+        role: master
+        bmcAddress: redfish-virtualmedia+https://YourBmcIp/redfish/v1/Systems/1
+        bmcCredentialsName:
+          name: "lenovo-1"
+        bootMACAddress: "b4:96:91:dc:0e:54"
+        bootMode: "UEFI"
+        rootDeviceHints:
+          deviceName: /dev/sda
+        nodeNetwork:
+          config:
+            interfaces:
+              - name: ens4f0
+                type: ethernet
+                state: up
+                ipv4:
+                  enabled: true
+                  dhcp: false
+                  address:
+                    - ip: 192.168.53.47
+                      prefix-length: 25
+                ipv6:
+                  enabled: false
+            dns-resolver:
+              config:
+                server:
+                  - 192.168.24.80
+            routes:
+              config:
+                - destination: 0.0.0.0/0
+                  next-hop-address: 192.168.53.1
+                  next-hop-interface: ens4f0
+          interfaces:
+            - name: "ens4f0"
+              macAddress: "b4:96:91:dc:0e:54"
+
+
